@@ -1,0 +1,30 @@
+{
+  "name": "speedback-session",
+  "version": "0.0.1",
+  "description": "Auto generates speedback pairs for your team",
+  "main": "build/src/Speedback.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "lint": "tslint src/**/*.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.13.0",
+    "@badeball/cypress-cucumber-preprocessor": "^18.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^8.0.29",
+    "babel-jest": "^29.0.0",
+    "cypress": "^13.0.0",
+    "esbuild": "^0.19.2",
+    "jest": "^29.0.0",
+    "jest-extended": "^4.0.2",
+    "ts-jest": "^29.0.0",
+    "ts-node": "3.3.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.2.3"
+  }
+}
