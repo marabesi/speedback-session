@@ -1,5 +1,6 @@
 {
   "name": "speedback-session",
+  "private": false,
   "version": "0.0.1",
   "description": "Auto generates speedback pairs for your team",
   "main": "build/src/Speedback.js",
