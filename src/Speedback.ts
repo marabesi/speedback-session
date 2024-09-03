@@ -8,6 +8,10 @@ export interface Member {
   name: string;
 }
 
+export interface Speedback {
+  generateRounds(): Rounds[];
+}
+
 interface PossiblePairs extends Member  {
   met: boolean;
   busy: boolean;
@@ -18,7 +22,7 @@ interface PairsTable {
   possiblePairs: PossiblePairs[]
 }
 
-export class Speedback {
+export class SpeedbackSession implements Speedback {
   private currentRound: number = 1;
   private matrixOfPairs: Array<PairsTable[]> = [];
 
@@ -139,7 +143,7 @@ export class Speedback {
     }
   }
 
-  shuffleRounds(): Rounds[] {
+  generateRounds(): Rounds[] {
     const teamMembers = this.team.length;
 
     if (!teamMembers) {

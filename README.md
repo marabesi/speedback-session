@@ -40,5 +40,6 @@ Round 3
 
 ## Resources used
 
+- [How to make a shell executable node file using TypeScript](https://stackoverflow.com/a/31366216/2258921)
 - [Node.js formatted console output](https://stackoverflow.com/a/42801006/2258921)
 - [End-to-end test your CLI tools](https://dev.to/giuliano1993/end-to-end-test-your-cli-tools-4gph)

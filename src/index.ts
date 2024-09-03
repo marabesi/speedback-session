@@ -1,4 +1,4 @@
-import { Member, Speedback } from "./Speedback";
+import { Member, SpeedbackSession } from "./Speedback";
 
 const term = require('terminal-kit').terminal;
 const { program } = require('commander');
@@ -25,8 +25,8 @@ const members = teamMemberNames
     name,
   }));
 
-const speedbackSession = new Speedback(members);
-const rounds = speedbackSession.shuffleRounds();
+const speedbackSession = new SpeedbackSession(members);
+const rounds = speedbackSession.generateRounds();
 
 rounds.forEach((rounds) => {
   term.bold(`Round ${rounds.roundNumber}\n`);
