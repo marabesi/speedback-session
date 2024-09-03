@@ -4,7 +4,8 @@ const term = require('terminal-kit').terminal;
 const { program } = require('commander');
 
 program
-  .option('-t, --team <members>', 'Your team member names comma separeted');
+  .option('-t, --team <members>', 'Your team member names comma separeted')
+  .option('-s, --shuffle', 'Randomize the rounds');
 
 program.parse();
 
@@ -14,6 +15,8 @@ if (!options.team) {
   term("Provide at least one team member\n");
   process.exit(1);
 }
+
+const shuffle = options.shuffle || false;
 
 const teamMemberNames = options.team || [];
 
@@ -25,7 +28,7 @@ const members = teamMemberNames
     name,
   }));
 
-const speedbackSession = new SpeedbackSession(members);
+const speedbackSession = new SpeedbackSession(members, { shuffle });
 const rounds = speedbackSession.generateRounds();
 
 rounds.forEach((rounds) => {

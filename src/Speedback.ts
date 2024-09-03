@@ -1,3 +1,5 @@
+import { shuffle } from './shuffle';
+
 export interface Rounds {
   roundNumber: number;
   pairs: Array<Member[]>
@@ -6,6 +8,10 @@ export interface Rounds {
 export interface Member {
   id: string;
   name: string;
+}
+
+export interface SpeedbackOptions {
+  shuffle: boolean;
 }
 
 export interface Speedback {
@@ -26,7 +32,7 @@ export class SpeedbackSession implements Speedback {
   private currentRound: number = 1;
   private matrixOfPairs: Array<PairsTable[]> = [];
 
-  constructor(private team: Member[]) {}
+  constructor(private team: Member[], private options?: SpeedbackOptions) {}
 
   private fillAllPossibleMatchesForA(member: Member): PossiblePairs[] {
     return this.team
@@ -152,6 +158,10 @@ export class SpeedbackSession implements Speedback {
 
     if (teamMembers % 2) {
       this.team.push({ id: "-", name: "Alone" })
+    }
+
+    if (this.options && this.options.shuffle) {
+      this.team = shuffle(this.team);
     }
 
     for (let i = 0; i < teamMembers; i++) {

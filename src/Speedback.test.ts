@@ -1,4 +1,9 @@
-import { Member, SpeedbackSession } from './Speedback'
+import { shuffle } from './shuffle';
+import { Member, SpeedbackSession } from './Speedback';
+
+jest.mock('./shuffle');
+
+const shuffleMocked = jest.mocked(shuffle);
 
 describe('Speedback room', () => {
   it('empty team should return empty array', () => {
@@ -28,7 +33,7 @@ describe('Speedback room', () => {
       {id: '1', name: 'Ana'},
       {id: '2', name: 'John'},
       {id: '3', name: 'Maria'},
-    ]
+    ];
 
     const speedback = new SpeedbackSession(team).generateRounds();
 
@@ -88,5 +93,21 @@ describe('Speedback room', () => {
       [team[0], team[3]],
       [team[1], team[2]],
     ]);
+  });
+
+  it('should shuffle pairs randomly', () => {
+    const team: Member[] = [
+      { id: '1', name: 'Ana' },
+      { id: '2', name: 'John' },
+      { id: '3', name: 'Maria' },
+      { id: '4', name: 'Clara' },
+    ];
+
+    shuffleMocked.mockReturnValue(team);
+
+    const speedback = new SpeedbackSession(team, { shuffle: true });
+    speedback.generateRounds();
+
+    expect(shuffleMocked).toHaveBeenCalled();
   });
 });
