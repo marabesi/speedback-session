@@ -1,12 +1,13 @@
 {
   "name": "speedback-session",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Auto generates speedback pairs for your team",
   "main": "build/src/Speedback.js",
+  "bin": "build/src/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "rm -rf build/ && tsc",
     "dev": "tsc -w",
     "lint": "tslint src/**/*.ts",
     "cli": "ts-node src/index.ts"
