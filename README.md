@@ -43,3 +43,12 @@ Round 3
 - [How to make a shell executable node file using TypeScript](https://stackoverflow.com/a/31366216/2258921)
 - [Node.js formatted console output](https://stackoverflow.com/a/42801006/2258921)
 - [End-to-end test your CLI tools](https://dev.to/giuliano1993/end-to-end-test-your-cli-tools-4gph)
+
+## Related material
+
+- https://www.smashingmagazine.com/2022/04/testing-cli-way-people-use-it/
+- https://www.smashingmagazine.com/2021/11/powerful-terminal-commandline-tools-modern-web-development/
+- https://pkaramol.medium.com/end-to-end-command-line-tool-testing-with-bats-and-auto-expect-7a4ffb19336d
+- https://github.com/vesln/nixt
+- https://katalon.com/resources-center/blog/end-to-end-e2e-testing-tools-frameworks
+

@@ -16,12 +16,9 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/preset-typescript": "^7.13.0",
-    "@badeball/cypress-cucumber-preprocessor": "^18.0.5",
-    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "@types/jest": "^29.0.0",
     "@types/node": "^8.0.29",
     "babel-jest": "^29.0.0",
-    "cypress": "^13.0.0",
     "esbuild": "^0.19.2",
     "jest": "^29.0.0",
     "jest-extended": "^4.0.2",
