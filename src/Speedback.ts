@@ -28,26 +28,37 @@ interface PairsTable {
   possiblePairs: PossiblePairs[]
 }
 
+const alone = { id: '-', name: 'Alone' };
+
 export class SpeedbackSession implements Speedback {
   private currentRound: number = 1;
   private matrixOfPairs: Array<PairsTable[]> = [];
+  private shouldUseAlone: boolean = false;
+  private originalTeam: Member[] = [];
 
-  constructor(private team: Member[], private options?: SpeedbackOptions) {}
+  constructor(private team: Member[], private options?: SpeedbackOptions) {
+    this.originalTeam = [ ...this.team ];
+  }
 
-  private fillAllPossibleMatchesForA(member: Member): PossiblePairs[] {
-    return this.team
+  private fillAllPossibleMatchesForA(member: Member, index: number): PossiblePairs[] {
+    let team = this.originalTeam
       .filter(user => {
-        if (this.team.length === 1) {
-          return true;
-        }
-
         return user.id !== member.id;
-      })
-      .map(user => ({
-        ...user,
-        met: false,
-        busy: false
-      }));
+      });
+
+    if (this.shouldUseAlone && (team.length === 1 || index === 0)) {
+      team.push(alone);
+    }
+
+    if (this.shouldUseAlone && index > 0) {
+      team.unshift(alone);
+    }
+
+    return team.reverse().map(user => ({
+      ...user,
+      met: false,
+      busy: false
+    }));
   }
 
   private findFirstAvailablePersonFor(member: Member, round: number): Member[] {
@@ -67,7 +78,11 @@ export class SpeedbackSession implements Speedback {
         for (let n = 0; n < currentMember.possiblePairs.length; n++) {
           const possiblePair = currentMember.possiblePairs[n];
           
-          if (!possiblePair.busy && !possiblePair.met) {
+          if (possiblePair.met) {
+            continue;
+          }
+
+          if (!possiblePair.busy) {
             membersToPair.push(possiblePair);
 
             this.markBusy(possiblePair);
@@ -157,7 +172,7 @@ export class SpeedbackSession implements Speedback {
     }
 
     if (teamMembers % 2) {
-      this.team.push({ id: "-", name: "Alone" })
+      this.shouldUseAlone = true;
     }
 
     if (this.options && this.options.shuffle) {
@@ -165,7 +180,7 @@ export class SpeedbackSession implements Speedback {
     }
 
     for (let i = 0; i < teamMembers; i++) {
-      const possiblePairs = this.fillAllPossibleMatchesForA(this.team[i]);
+      const possiblePairs = this.fillAllPossibleMatchesForA(this.team[i], i);
       this.matrixOfPairs[i] = [
         { member: this.team[i], possiblePairs } 
       ];
@@ -174,28 +189,26 @@ export class SpeedbackSession implements Speedback {
     const numberOfRounds = this.matrixOfPairs[0][0].possiblePairs.length;
     let currentRound = 1;
 
-      const returnMatrix: Rounds[] = [];
+    const returnMatrix: Rounds[] = [];
 
-      while (currentRound <= numberOfRounds) {
+    while (currentRound <= numberOfRounds) {
 
-        const pairs = [];
-
-        for (let i = 0; i < this.team.length; i++) {
-          pairs.push(
-            this.findFirstAvailablePersonFor(this.team[i], currentRound),
-          )
-        }
-
-        returnMatrix.push(
-          {
-            roundNumber: currentRound,
-            pairs: pairs.filter((rouds: Member[]) => rouds.length > 0)
-          })
-
-          currentRound++;
+      const pairs = [];
+      for (let i = 0; i < this.team.length; i++) {
+        pairs.push(
+          this.findFirstAvailablePersonFor(this.team[i], currentRound),
+        );
       }
 
-      return returnMatrix;
+      returnMatrix.push({
+        roundNumber: currentRound,
+        pairs: pairs.filter((rouds: Member[]) => rouds.length > 0)
+      });
+
+        currentRound++;
+    }
+
+    return returnMatrix;
   }
 }
 
