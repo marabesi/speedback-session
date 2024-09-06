@@ -52,3 +52,8 @@ Round 3
 - https://github.com/vesln/nixt
 - https://katalon.com/resources-center/blog/end-to-end-e2e-testing-tools-frameworks
 
+- https://github.com/cucumber/cucumber-js
+- https://www.testim.io/blog/cucumber-js-for-bdd-an-introductory-tutorial-with-examples/
+- https://daniel-delimata.medium.com/cucumber-in-the-typescript-a86bd03117a7
+
+- https://stackabuse.com/how-to-save-command-output-as-variable-in-bash/
