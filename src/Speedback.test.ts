@@ -5,6 +5,12 @@ jest.mock('./shuffle');
 
 const shuffleMocked = jest.mocked(shuffle);
 
+const alone: Member = { id: '-', name: 'Alone' };
+const ana = { id: '1', name: 'Ana' };
+const john = { id: '2', name: 'John' };
+const maria = { id: '3', name: 'Maria' };
+const clara = { id: '4', name: 'Clara' };
+
 describe('Speedback room', () => {
   it('empty team should return empty array', () => {
     const team: Member[] = []
@@ -15,92 +21,104 @@ describe('Speedback room', () => {
   });
 
   it('team of one should make one alone', () => {
-    const team: Member[] = [
-      {id: '1', name: 'Ana'},
-    ]
+    const team: Member[] = [ ana ]
 
-    const alone: Member = {
-      id: '-',
-      name: 'Alone'
-    };
     const speedback = new SpeedbackSession(team).generateRounds();
 
-    expect(speedback[0].pairs).toIncludeAllMembers([[ team[0], alone ] ]);
+    expect(speedback[0].pairs).toIncludeAllMembers([[ ana, alone ] ]);
   });
 
-  it('team of three should make make use of "Alone"', () => {
+  describe('team of three should make use of "Alone"', () => {
     const team: Member[] = [
-      {id: '1', name: 'Ana'},
-      {id: '2', name: 'John'},
-      {id: '3', name: 'Maria'},
+      ana,
+      john,
+      maria,
     ];
 
-    const speedback = new SpeedbackSession(team).generateRounds();
+    it("first round should have three pairs", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+      expect(speedback).toHaveLength(3);
+    });
 
-    const alone: Member = {
-      id: '-',
-      name: 'Alone'
-    };
+    it("For first round Ana should pair with John", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
 
-    expect(speedback[0].pairs).toIncludeAllMembers([
-      [team[0], team[1]],
-      [team[2], alone],
-    ]);
+      expect(speedback[0].pairs[0]).toEqual([ana, john]);
+    });
 
-    expect(speedback[1].pairs).toIncludeAllMembers([
-      [team[0], team[2]],
-      [team[1], alone],
-    ]);
+    it("For first round Maria should pair with Alone", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
 
-    expect(speedback[2].pairs).toIncludeAllMembers([
-      [team[0], alone],
-      [team[1], team[2]],
-    ]);
+      expect(speedback[0].pairs[1]).toEqual([maria, alone]);
+    });
+
+    it("For second round Ana should pair with Maria", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[1].pairs[0]).toEqual([ana, maria]);
+    });
+
+    it("For second round John should pair with Alone", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[1].pairs[1]).toEqual([john, alone]);
+    });
+
+    it("For third round John should pair with Maria", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[2].pairs[1]).toEqual([john, maria]);
+    });
+
+    it("For third round Ana should pair with Alone", () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[2].pairs[0]).toEqual([ana, alone]);
+    });
   });
 
   it('team of two should make one round', () => {
-    const team: Member[] = [
-      {id: '1', name: 'Ana'},
-      {id: '2', name: 'John'},
-    ]
+    const team: Member[] = [ ana, john, ];
 
     const speedback = new SpeedbackSession(team).generateRounds();
 
-    expect(speedback[0].pairs[0]).toEqual(expect.arrayContaining([team[0], team[1]]));
+    expect(speedback[0].pairs[0]).toEqual([ana, john]);
   });
 
-  it('team of four should make three rounds', () => {
+  describe('team of four', () => {
     const team: Member[] = [
-      { id: '1', name: 'Ana' },
-      { id: '2', name: 'John' },
-      { id: '3', name: 'Maria' },
-      { id: '4', name: 'Clara' },
-    ]
+      ana,
+      john,
+      maria,
+      clara,
+    ];
 
-    const speedback = new SpeedbackSession(team).generateRounds();
-
-    expect(speedback[0].pairs).toEqual([
-      [team[0], team[1]],
-      [team[2], team[3]],
-    ]);
-
-    expect(speedback[1].pairs).toIncludeAllMembers([
-      [team[0], team[2]],
-      [team[1], team[3]],
-    ]);
-
-    expect(speedback[2].pairs).toIncludeAllMembers([
-      [team[0], team[3]],
-      [team[1], team[2]],
-    ]);
+    it('team of four should make three rounds', () => {  
+      const speedback = new SpeedbackSession(team).generateRounds();
+  
+      expect(speedback[0].pairs).toEqual([
+        [ana, john],
+        [maria, clara],
+      ]);
+  
+      expect(speedback[1].pairs).toIncludeAllMembers([
+        [ana, maria],
+        [john, clara],
+      ]);
+  
+      expect(speedback[2].pairs).toIncludeAllMembers([
+        [ana, clara],
+        [john, maria],
+      ]);
+    });
   });
 
   it('should shuffle pairs randomly', () => {
     const team: Member[] = [
-      { id: '1', name: 'Ana' },
-      { id: '2', name: 'John' },
-      { id: '3', name: 'Maria' },
-      { id: '4', name: 'Clara' },
+      ana,
+      john,
+      maria,
+      clara,
     ];
 
     shuffleMocked.mockReturnValue(team);
