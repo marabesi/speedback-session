@@ -17,11 +17,6 @@
     "sourceMap": true,
     "inlineSources": true,
     "esModuleInterop": true,
-    "paths": {
-      "@badeball/cypress-cucumber-preprocessor/*": [
-        "./node_modules/@badeball/cypress-cucumber-preprocessor/dist/subpath-entrypoints/*"
-      ]
-    },
     "types": [
       "jest",
       "node"
@@ -29,10 +24,7 @@
   },
   // https://stackoverflow.com/questions/58999086/cypress-causing-type-errors-in-jest-assertions
   "exclude": [
-    "./cypress.config.ts",
     //other exclusions that may help https://github.com/cypress-io/cypress/issues/22059#issuecomment-1428298264
     "node_modules",
-    "cypress",
-    "**/*.cy.tsx"
   ]
 }
