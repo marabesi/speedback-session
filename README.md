@@ -10,6 +10,11 @@ and professional development.
 
 - [Running a Speedback session](https://www.codurance.com/publications/speedback-session-feedback)
 - [​What speedback is and how to run it using zoom breakout rooms](https://www.thoughtworks.com/en-es/insights/blog/what-speedback-and-how-run-it-using-zoom-breakout-rooms)
+- [Speedback Feedback](https://labspractices.com/practices/speedback)
+- [Speedback: De-stigmatise feedback via speed-dating principles](https://medium.com/@joshproduct/speedback-de-stigmatise-feedback-with-speed-dating-principles-4708d493fb63)
+- [How to Run a 360˚ Speedback](https://meganesulli.com/blog/how-to-run-a-speedback)
+- [Speed-back feedback](https://medium.com/@tmarinkovic.tm/speed-back-feedback-6b8c35bfe005)
+- [yqht/speedback-app-ahoy](https://github.com/lyqht/speedback-app-ahoy)
 
 ## How to use this package
 
