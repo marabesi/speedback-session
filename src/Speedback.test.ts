@@ -11,6 +11,7 @@ const john = { id: '2', name: 'John' };
 const maria = { id: '3', name: 'Maria' };
 const clara = { id: '4', name: 'Clara' };
 const andy = { id: '5', name: 'Andy' };
+const tom = { id: '6', name: 'Tom' };
 
 describe('Speedback room', () => {
   it('empty team should return empty array', () => {
@@ -70,7 +71,7 @@ describe('Speedback room', () => {
     it("For second round John should pair with Alone", () => {
       const speedback = new SpeedbackSession(team).generateRounds();
 
-      expect(speedback[1].pairs[1]).toEqual([john, alone]);
+      expect(speedback[1].pairs[1]).toEqual([alone, john]);
     });
 
     it("For third round Maria should pair with Alone", () => {
@@ -96,7 +97,7 @@ describe('Speedback room', () => {
 
     it('team of four should make three rounds', () => {  
       const speedback = new SpeedbackSession(team).generateRounds();
-  
+
       expect(speedback[0].pairs).toEqual([
         [ana, clara],
         [john, maria],
@@ -104,7 +105,7 @@ describe('Speedback room', () => {
   
       expect(speedback[1].pairs).toIncludeAllMembers([
         [ana, maria],
-        [john, clara],
+        [clara, john],
       ]);
   
       expect(speedback[2].pairs).toIncludeAllMembers([
@@ -138,8 +139,8 @@ describe('Speedback room', () => {
   
       expect(speedback[1].pairs).toEqual([
         [ana, andy],
-        [john, clara],
-        [maria, alone]
+        [alone, clara],
+        [john, maria]
       ]);
     });
 
@@ -148,8 +149,8 @@ describe('Speedback room', () => {
   
       expect(speedback[2].pairs).toEqual([
         [ana, clara],
-        [john, maria],
-        [andy, alone]
+        [andy, maria],
+        [alone, john]
       ]);
     });
   });
@@ -168,5 +169,66 @@ describe('Speedback room', () => {
     speedback.generateRounds();
 
     expect(shuffleMocked).toHaveBeenCalled();
+  });
+
+  describe("team of six", () => {
+    const team: Member[] = [
+      ana,
+      john,
+      maria,
+      clara,
+      andy,
+      tom
+    ];
+
+    it('First round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[0].pairs).toEqual([
+        [ana, tom],
+        [john, andy],
+        [maria, clara],
+      ]);
+    });
+
+    it('Second round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[1].pairs).toEqual([
+        [ana, andy],
+        [tom, clara],
+        [john, maria],
+      ]);
+    });
+
+    it('Third round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[2].pairs).toEqual([
+        [ana, clara],
+        [andy, maria],
+        [tom, john],
+      ]);
+    });
+
+    it('Fourth round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[3].pairs).toEqual([
+        [ana, maria],
+        [clara, john],
+        [andy, tom],
+      ]);
+    });
+
+    it('Fifth round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+
+      expect(speedback[4].pairs).toEqual([
+        [ana, john],
+        [maria, tom],
+        [clara, andy],
+      ]);
+    });
   });
 });

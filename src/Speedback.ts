@@ -18,151 +18,12 @@ export interface Speedback {
   generateRounds(): Rounds[];
 }
 
-interface PossiblePairs extends Member  {
-  met: boolean;
-  busy: boolean;
-}
-
-interface PairsTable {
-  member: Member;
-  possiblePairs: PossiblePairs[]
-}
-
 const alone = { id: '-', name: 'Alone' };
 
 export class SpeedbackSession implements Speedback {
-  private currentRound: number = 1;
-  private matrixOfPairs: Array<PairsTable[]> = [];
-  private shouldUseAlone: boolean = false;
-  private originalTeam: Member[] = [];
+  private matrixOfPairs: Member[][][];
 
-  constructor(private team: Member[], private options?: SpeedbackOptions) {
-    this.originalTeam = [ ...this.team ];
-  }
-
-  private fillAllPossibleMatchesForA(member: Member, index: number): PossiblePairs[] {
-    let team = this.originalTeam
-      .filter(user => {
-        return user.id !== member.id;
-      });
-
-    if (this.shouldUseAlone && (team.length === 1 || index === 0)) {
-      team.push(alone);
-    }
-
-    if (this.shouldUseAlone && index > 0) {
-      team.unshift(alone);
-    }
-
-    return team.reverse().map(user => ({
-      ...user,
-      met: false,
-      busy: false
-    }));
-  }
-
-  private findFirstAvailablePersonFor(member: Member, round: number): Member[] {
-    if (round !== this.currentRound) {
-      this.makeAllMembersNotBusy();
-      this.currentRound = round;
-    }
-
-    if (this.isBusy(member)) return [];
-
-    const membersToPair: Member[] = [member];
-
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-      
-      if (currentMember.member.id === member.id) {
-        for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-          const possiblePair = currentMember.possiblePairs[n];
-          
-          if (possiblePair.met) {
-            continue;
-          }
-
-          if (!possiblePair.busy) {
-            membersToPair.push(possiblePair);
-
-            this.markBusy(possiblePair);
-            this.markBusy(member);
-
-            this.markMetForBoth(member, possiblePair);
-            break;
-          }
-        }
-      }
-    }
-
-    return membersToPair.map(pair => {
-      return { id: pair.id, name: pair.name }
-    });
-  }
-
-  private makeAllMembersNotBusy() {
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-
-      for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-        const possiblePair = currentMember.possiblePairs[n];
-          possiblePair.busy = false;
-      }
-    }
-  }
-
-  private markMetForBoth(member: Member, possiblePair: PossiblePairs) {
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-      if (member.id === currentMember.member.id) {
-        for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-          if (possiblePair.id === currentMember.possiblePairs[n].id) {
-            currentMember.possiblePairs[n].met = true;
-            break;
-          }
-        }
-      }
-    }
-
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-      if (possiblePair.id === currentMember.member.id) {
-        for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-          if (member.id === currentMember.possiblePairs[n].id) {
-            currentMember.possiblePairs[n].met = true;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  private isBusy(member: Member): boolean {
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-
-      for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-        const possiblePair = currentMember.possiblePairs[n];
-        if (possiblePair.id === member.id && possiblePair.busy) {
-          return true
-        }
-      }
-    }
-    return false;
-  }
-
-  private markBusy(member: Member) {
-    for (let j = 0; j < this.matrixOfPairs.length; j++) {
-      const currentMember = this.matrixOfPairs[j][0];
-
-      for (let n = 0; n < currentMember.possiblePairs.length; n++) {
-        const possiblePair = currentMember.possiblePairs[n];
-        if (possiblePair.id === member.id) {
-          possiblePair.busy = true;
-        }
-      }
-    }
-  }
+  constructor(private team: Member[], private options?: SpeedbackOptions) { }
 
   generateRounds(): Rounds[] {
     const teamMembers = this.team.length;
@@ -171,44 +32,74 @@ export class SpeedbackSession implements Speedback {
       return [];
     }
 
-    if (teamMembers % 2) {
-      this.shouldUseAlone = true;
+    if (this.team.length === 1) {
+      return [
+        {
+          roundNumber: 1,
+          pairs: [[this.team[0], alone]]
+        }
+      ]
+    }
+
+    if (this.team.length === 2) {
+      return [
+        {
+          roundNumber: 1,
+          pairs: [[this.team[0], this.team[1]]]
+        }
+      ]
     }
 
     if (this.options && this.options.shuffle) {
       this.team = shuffle(this.team);
     }
 
-    for (let i = 0; i < teamMembers; i++) {
-      const possiblePairs = this.fillAllPossibleMatchesForA(this.team[i], i);
-      this.matrixOfPairs[i] = [
-        { member: this.team[i], possiblePairs } 
-      ];
-    }
-
-    const numberOfRounds = this.matrixOfPairs[0][0].possiblePairs.length;
-    let currentRound = 1;
-
     const returnMatrix: Rounds[] = [];
 
-    while (currentRound <= numberOfRounds) {
+    this.matrixOfPairs = this.roundRobin(this.team);
 
+    this.matrixOfPairs.forEach((round, index) => {
       const pairs = [];
-      for (let i = 0; i < this.team.length; i++) {
-        pairs.push(
-          this.findFirstAvailablePersonFor(this.team[i], currentRound),
-        );
-      }
+      round.forEach(match => pairs.push([match[0], match[1]]));
 
       returnMatrix.push({
-        roundNumber: currentRound,
-        pairs: pairs.filter((rouds: Member[]) => rouds.length > 0)
+        roundNumber: index + 1,
+        pairs
       });
-
-        currentRound++;
-    }
+    });
 
     return returnMatrix;
+  }
+
+  private roundRobin(participants: Member[]): Member[][][] {
+    const totalParticipants = participants.length;
+
+    if (totalParticipants % 2 !== 0) {
+      participants.push(alone);
+    }
+
+    const totalRounds = participants.length - 1;
+    const halfSize = participants.length / 2;
+    const schedule: Member[][][] = [];
+
+    for (let round = 0; round < totalRounds; round++) {
+      const roundMatches: Member[][] = [];
+
+      for (let i = 0; i < halfSize; i++) {
+        const home = participants[i];
+        const away = participants[participants.length - 1 - i];
+        roundMatches.push([home, away]);
+      }
+
+      schedule.push(roundMatches);
+
+      const last = participants.pop();
+      if (last) {
+        participants.splice(1, 0, last);
+      }
+    }
+
+    return schedule;
   }
 }
 
