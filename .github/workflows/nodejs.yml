@@ -59,6 +59,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: npm install
+        run: |
+          npm i
+
       - name: "Install bashunit"
         run: |
           curl -s https://bashunit.typeddevs.com/install.sh > install.sh
