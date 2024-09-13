@@ -63,6 +63,7 @@ jobs:
         run: |
           curl -s https://bashunit.typeddevs.com/install.sh > install.sh
           chmod +x install.sh
+          ./install.sh
 
       - name: "Run test"
         run: "./lib/bashunit acceptance"
