@@ -57,6 +57,12 @@ Round 3
 - https://github.com/vesln/nixt
 - https://katalon.com/resources-center/blog/end-to-end-e2e-testing-tools-frameworks
 
+### round robin
+
+- [An efficient approach to combinations of pairs in groups without repetitions?](https://stackoverflow.com/questions/54447564/an-efficient-approach-to-combinations-of-pairs-in-groups-without-repetitions)
+
+### acceptance testing
+
 - https://github.com/cucumber/cucumber-js
 - https://www.testim.io/blog/cucumber-js-for-bdd-an-introductory-tutorial-with-examples/
 - https://daniel-delimata.medium.com/cucumber-in-the-typescript-a86bd03117a7

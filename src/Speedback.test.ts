@@ -153,6 +153,26 @@ describe('Speedback room', () => {
         [alone, john]
       ]);
     });
+
+    it('Fourth round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+  
+      expect(speedback[3].pairs).toEqual([
+        [ana, maria],
+        [clara, john],
+        [andy, alone]
+      ]);
+    });
+
+    it('Fifth round', () => {
+      const speedback = new SpeedbackSession(team).generateRounds();
+  
+      expect(speedback[4].pairs).toEqual([
+        [ana, john],
+        [maria, alone],
+        [clara, andy]
+      ]);
+    });
   });
 
   it('should shuffle pairs randomly', () => {
