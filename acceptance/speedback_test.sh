@@ -8,6 +8,12 @@ function test_should_generate_a_single_round_with_a_pair() {
   assert_contains "${string}" "${output}"
 }
 
+function test_no_team_should_warm_with_message() { 
+  output=$(yarn cli -t "")
+  local string="Provide at least one team member"
+  assert_contains "${string}" "${output}"
+}
+
 function test_should_generate_five_rouds_for_a_team_of_five() {
   output=$(yarn cli -t "Ana, John, Maria, Clara, Andy")
   local string="Round 1
