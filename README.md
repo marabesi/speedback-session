@@ -1,6 +1,7 @@
 # Speedback session
 
 [![Continuous Integration Workflow](https://github.com/marabesi/speedback-session/actions/workflows/nodejs.yml/badge.svg)](https://github.com/marabesi/speedback-session/actions/workflows/nodejs.yml)
+
 [![https://nodei.co/npm/speedback-session.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/speedback-session.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/speedback-session)
 
 Speedback session is a package that automatically create the rounds and the pairs for your speedback.
