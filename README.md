@@ -22,6 +22,10 @@ and professional development.
 
 ## How to use this package
 
+This package is available in two ways, the first is to use it as a command line tool and the second is programmatically.
+
+### Command line tool
+
 ```sh
 npx speedback-session --team "Eugenia Sweeney,Korey Daugherty,Katina Kelly"
 ```
@@ -45,6 +49,52 @@ Round 3
 
   Eugenia Sweeney + Alone
   Korey Daugherty + Katina Kelly
+```
+
+### Programatically
+
+Installing the package in your project, via npm or yarn
+
+```sh
+npm i speedback-session --save
+# or
+yarn add speedback-session
+```
+
+And then, using the package via nodejs:
+
+```js
+const { SpeedbackSession } = require("speedback-session");
+
+const team = [
+  {id: '1 ', name: 'Ana'},
+  {id: '2', name: 'John'}
+];
+
+const speedback = new SpeedbackSession(team);
+const rounds = speedback.generateRounds();
+
+console.log(rounds);
+
+// outputs
+
+[
+  {
+    "roundNumber": 1,
+    "pairs": [
+      [
+        {
+          "id": "1 ",
+          "name": "Ana"
+        },
+        {
+          "id": "2",
+          "name": "John"
+        }
+      ]
+    ]
+  }
+]
 ```
 
 ## Resources used
